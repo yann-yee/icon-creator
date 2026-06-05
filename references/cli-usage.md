@@ -4,7 +4,7 @@
 
 ## 获取可执行文件
 
-从 [GitHub Releases](https://github.com/你的用户名/icon-creator/releases) 页面下载对应平台的文件：
+从 [GitHub Releases](https://github.com/yann-yee/icon-creator/releases) 页面下载对应平台的文件：
 
 | 平台          | 文件名                            |
 |---------------|-----------------------------------|
