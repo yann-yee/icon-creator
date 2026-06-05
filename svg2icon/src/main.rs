@@ -11,7 +11,7 @@ use std::fs;
 /// 默认生成六种尺寸：1024, 512, 256, 128, 64, 32
 /// 采用超采样技术确保缩放后锐利无比。
 #[derive(Parser, Debug)]
-#[command(name = "svg2icon", version = "0.2", about, long_about = None)]
+#[command(name = "svg2icon", version = "2.0", about, long_about = None)]
 struct Args {
     /// 输入的 SVG 文件路径
     #[arg(short = 's', long)]

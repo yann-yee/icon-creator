@@ -22,7 +22,7 @@ jobs:
 
           - os: macos-latest
             target: x86_64-apple-darwin
-            binary_name: svg2icon-darwin
+            binary_name: svg2icon-mac
             ext: ''
 
           - os: windows-latest
@@ -93,7 +93,7 @@ jobs:
           | 平台 | 文件 |
           |------|------|
           | 🐧 Linux   | \`svg2icon-linux\`  (静态链接，兼容所有发行版) |
-          | 🍎 macOS   | \`svg2icon-darwin\` |
+          | 🍎 macOS   | \`svg2icon-mac\` |
           | 🪟 Windows | \`svg2icon-win.exe\` |
 
           ### 使用方式
