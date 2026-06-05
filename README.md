@@ -9,7 +9,7 @@
 
 ### 下载可执行文件
 
-从 [GitHub Releases](https://github.com/你的用户名/icon-creator/releases) 下载对应平台的二进制文件：
+从 [GitHub Releases](https://github.com/yann-yee/icon-creator/releases) 下载对应平台的二进制文件：
 
 ```bash
 # Linux / macOS
