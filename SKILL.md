@@ -314,3 +314,207 @@ user-invocable: true
 | [references/app-icon-styles-guide.md](references/app-icon-styles-guide.md) | 13 种应用图标风格详解 + 设计流程 | 知乎「设计师必看的图标设计指南」 |
 | [references/functional-icon-grid.md](references/functional-icon-grid.md) | 功能图标网格系统 + 状态规范 + 正负形衡量法 | 知乎「设计师必看的图标设计指南」 |
 | [references/design-resources.md](references/design-resources.md) | 外部工具/配色网站/插件/学习教程汇编 | 两份资源汇总 |
+
+---
+
+# 强化执行层：Skill 与内置 CLI 的统一工作协议
+
+本节是本 skill 的**最高优先级执行协议**。上文提供设计理论、审美标准与视觉方法；本节规定实际工作时如何把设计判断、SVG 生产、质量检查与交付导出统一为一个闭环。
+
+## 0. 角色边界
+
+本 skill 分为两层：
+
+| 层级 | 责任 | 不负责 |
+|---|---|---|
+| Skill / Agent | 理解需求、追问、判断资产类型、提出方向、生成 SVG、做设计质检、解释正反案例 | 不直接承担平台位图导出的底层实现 |
+| `svg2icon` CLI | 对 SVG 执行结构化检查、导出 PNG/JPG/ICO/ICNS、生成 mono/reversed、自动命名交付物 | 不做审美判断、不替用户决定品牌气质、不生成设计概念 |
+
+**强制原则**：CLI 是交付引擎，不是设计师。所有设计决策必须在 SVG 生成前由 skill 完成；CLI 只处理“已生成 SVG → 可交付资产”。
+
+## 1. 任务入口判定
+
+收到请求后，先判断用户真正需要的是哪一种资产：
+
+| 用户说法 | 应判定为 | 产出重点 |
+|---|---|---|
+| “给我设计一个品牌标志 / logo / mark” | Logo / Brand Mark | 记忆点、品牌差异、单色可用性、横竖组合潜力 |
+| “给 app 做图标 / 桌面图标 / 应用图标” | App Icon | 背板、平台适配、启动器可读性、1024/512/256 导出 |
+| “做一组功能图标 / 工具栏图标 / tab 图标” | Functional Icon Set | 语义一致、线宽统一、视觉重量一致、状态版本 |
+| “把这个 SVG 转成 png/ico/icns” | Delivery Export | 使用 `svg2icon`，先检查再导出 |
+| “优化我已有的图标” | Audit + Revision | 先审查，再给修改建议或重写 SVG |
+
+更多边界见：`references/00-reference-index.md` 与 `references/icon-vs-logo-distinction.md`。
+
+## 2. 标准工作流
+
+### Phase A — 需求压缩
+
+如果用户信息不足，最多追问 **3 个关键问题**。不得用长问卷阻塞创作。
+
+优先级：
+
+1. 品牌 / 产品是什么？
+2. 想传达的 1–2 个关键词是什么？
+3. 使用场景是什么：logo、app icon、functional icon，还是导出？
+
+如果用户已给足信息，直接进入设计，不重复追问。
+
+### Phase B — 设计方向
+
+生成 SVG 前，必须先在内部确认：
+
+- 资产类型：Logo / App Icon / Functional Icon
+- 主隐喻：一个核心符号，不超过两个辅助符号
+- 风格语言：几何 / 线性 / 面形 / 微扁平 / 字母标 / 正负形
+- 复杂度预算：小尺寸是否要保留细节
+- 是否需要 `primary / mono / reversed`
+
+可参考：
+
+- `references/01-brief-and-decision-tree.md`
+- `references/02-positive-negative-examples.md`
+- `references/logo-design-guide.md`
+- `references/icon-design-guide.md`
+
+### Phase C — SVG 生产
+
+所有 SVG 必须满足：
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" shape-rendering="geometricPrecision">
+```
+
+强制要求：
+
+- 只使用矢量元素，不使用 `<image>`。
+- 不嵌入 base64 位图。
+- 不引用外部字体、CSS、图片、滤镜文件。
+- 坐标尽量对齐 4px 网格。
+- 关键结构对齐 8×8 逻辑网格。
+- 小数最多保留 2 位，除非几何计算确有必要。
+- 图层分组必须语义化，如 `id="background"`、`id="symbol"`、`id="highlight"`。
+
+SVG 合约详见：`references/03-svg-contract-and-quality-gates.md`。
+
+### Phase D — 设计质检
+
+在交付 SVG 前，必须做人工设计质检：
+
+1. **0.3 秒识别**：第一眼能否理解主要符号？
+2. **16px 测试**：缩到极小尺寸是否仍可读？
+3. **单色测试**：变成纯黑是否仍成立？
+4. **反白测试**：变成纯白是否仍成立？
+5. **差异测试**：是否像竞品或通用模板？
+6. **负形测试**：空白是否形成意外图形？
+7. **统一测试**：如果是图标组，线宽、圆角、视觉重量是否一致？
+
+正反案例见：`references/02-positive-negative-examples.md`。
+
+### Phase E — CLI 导出
+
+当用户需要交付 PNG/ICO/ICNS/JPG 时，使用内置 CLI：
+
+```bash
+./bin/svg2icon-linux --svg logo.svg --variants primary,mono,reversed --sizes 512,256,128,64,32 -f png,ico -o dist/
+```
+
+规则：
+
+- 导出前 CLI 会自动检查 SVG。
+- 不再使用 `--invert`。
+- 正式变体使用 `--variants primary,mono,reversed`。
+- 文件名自动从 SVG 文件名派生，不额外询问命名。
+
+完整导出配方见：
+
+- `references/cli-usage.md`
+- `references/04-delivery-recipes.md`
+
+## 3. 设计输出格式
+
+如果用户只要求 SVG，输出应包含：
+
+1. 简短设计说明
+2. 完整 SVG 代码
+3. 质检摘要
+4. 可选导出命令
+
+如果用户要求交付包，输出应包含：
+
+1. SVG 源文件
+2. CLI 导出的 `primary / mono / reversed` 文件
+3. 目录结构说明
+4. 已通过 / 未执行的检查说明
+
+## 4. 正反判断原则
+
+### 好的 Logo
+
+- 一个主记忆点，而不是多个概念拼贴。
+- 黑白版本仍然可识别。
+- 小尺寸可读，不依赖渐变和细节。
+- 形状能解释品牌差异，而不是只像“行业图标”。
+
+### 差的 Logo
+
+- 把品牌所有关键词都画进去。
+- 只在大尺寸彩色稿中好看。
+- 依赖细碎高光、阴影、纹理。
+- 与竞品符号高度相似。
+
+### 好的 App Icon
+
+- 有清晰轮廓和强背板关系。
+- 在圆角裁切、深浅模式、启动器尺寸中都稳定。
+- 主体不要贴边，视觉重心居中但允许光学补偿。
+
+### 差的 App Icon
+
+- 直接把完整 logo 塞进小方块。
+- 文字太多，16–48px 下不可读。
+- 背景和主体对比不足。
+
+### 好的 Functional Icon Set
+
+- 一套统一的线宽、端点、圆角和隐喻粒度。
+- 每个图标都能被单独理解。
+- 激活、禁用、悬停状态有明确规则。
+
+### 差的 Functional Icon Set
+
+- 有的线性、有的面形、有的渐变。
+- 相似功能长得过于接近。
+- 视觉重量不一致，导航栏像从不同库拼接。
+
+## 5. 引用 references 的方式
+
+当用户请求“设计 / 优化 / 评审”时，应优先使用：
+
+- `references/01-brief-and-decision-tree.md`：决定要做什么
+- `references/02-positive-negative-examples.md`：给正反案例与避坑
+- `references/03-svg-contract-and-quality-gates.md`：检查 SVG 合规性
+- `references/04-delivery-recipes.md`：导出交付包
+
+原有深度资料继续保留：
+
+- `logo-design-guide.md`
+- `icon-design-guide.md`
+- `app-icon-styles-guide.md`
+- `functional-icon-grid.md`
+- `big-company-design-specs.md`
+
+## 6. 交付前最终检查清单
+
+交付前必须能回答：
+
+- 这个产物是 Logo、App Icon，还是 Functional Icon？
+- 是否使用 512×512 标准 SVG？
+- 是否没有 `<image>`、base64、外部资源？
+- 是否能生成 `primary / mono / reversed`？
+- 是否能缩小到 16px 或 24px 使用？
+- 是否存在明显竞品相似风险？
+- 是否给出了可复用的 CLI 导出命令？
+
+若任一关键项失败，必须先修正再交付。
+

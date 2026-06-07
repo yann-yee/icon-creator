@@ -1,6 +1,6 @@
 [package]
 name = "svg2icon"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 
 [dependencies]
@@ -11,3 +11,4 @@ resvg = "0.42"
 usvg = "0.42"
 tiny-skia = "0.11"
 image = "0.25"
+roxmltree = "0.20"
