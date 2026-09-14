@@ -1,520 +1,502 @@
 ---
 name: icon-creator
-description: 'Professional SVG icon and logo generator with fine art, modern graphic mechanics, and mathematical geometry foundations. Does not use external APIs or preview generation.'
-argument-hint: 'Describe product/brand, art school/style, color palette, or geometric concepts'
+description: Product-aware SVG icon/logo designer. Understands product meaning and feature intent, forms an aesthetic thesis and symbol strategy, then engineers production-ready SVG assets and export variants. Use for Logo, App Icon, Functional Icon Set, icon review, SVG optimization, and delivery export.
+argument-hint: 'Describe the product/feature, intended users and context, desired feeling or constraints. Existing context.md / DESIGN.md / feature design files will be reused when available.'
 user-invocable: true
 ---
 
-# Professional SVG Icon & Logo Creator (Fine Art Foundation)
+# Icon Creator V2 — Meaning Before Form
 
-## 🎯 核心目标
-生成可直接投入生产的纯矢量图标/标志，追求数学级精确、视觉完美平衡、风格高度统一。  
-所有输出必须基于 **512×512 标准画板**，通过严格的几何构造、光学补偿与格式塔原理，产出在任何尺寸下都具备专业品质的 `.svg` 代码。
+## Purpose
 
----
+Translate **product meaning + aesthetic intent** into a distinctive visual symbol, then engineer that symbol into production-ready vector assets.
 
-## ✅ SMART 原则（衡量标志成功的五项标准）
+The skill is not a style vending machine and not a geometry exercise.
 
-每个输出的 logo/图标都应通过这套评估框架检验：
+```text
+Product Meaning
+      ↓
+Aesthetic Thesis
+      ↓
+Symbol Strategy
+      ↓
+Concept Exploration
+      ↓
+Form Language
+      ↓
+Vector Engineering
+      ↓
+Contextual Review
+      ↓
+Delivery
+```
 
-### 1. Simple（简单）
-易于理解和识别，0.3 秒内传达核心概念。  
-*SVG 检查*：主干路径 ≤ 3 条、独立颜色 ≤ 3 种（渐变过渡色不计）、无冗余装饰路径。
+## Core Principles
 
-### 2. Memorable（令人难忘）
-具有独特的视觉锚点，让人过目不忘。  
-*SVG 实现*：通过负形切割、闭合律断点、几何矛盾空间或非对称构图制造记忆点。例如使用 `<mask>` 在正形中嵌入隐藏符号。
+1. **Meaning before Form** — understand what the product/feature changes before drawing.
+2. **Aesthetic Thesis before Style Tags** — “precise × human” is more useful than “modern / tech / minimal”.
+3. **Transformation over Object** — prefer the change created by the product over a literal industry object.
+4. **Visual Tension over Generic Adjectives** — good identity often lives between two qualities.
+5. **Symbol Territory before Symbol** — explore semantic territories before selecting a literal mark.
+6. **Geometry serves Intent** — grids, ratios and Gestalt are tools, never the aesthetic goal.
+7. **Distinction must be earned** — uniqueness should come from product meaning, not arbitrary weirdness.
+8. **Contextual Review over Isolated Beauty** — the asset must work in the real product and usage size.
 
-### 3. Ageless（永恒）
-依赖经典几何比例而不是流行趋势。  
-*SVG 约束*：使用黄金比例 φ=1.618、√2 矩形、斐波那契数列确定尺寸递进；禁止使用当前「热词」视觉元素。
+## Asset Modes
 
-### 4. Reliable（可靠）
-在不同平台、尺寸和背景下保持一致的表现力。  
-*SVG 检查*：始终启用 `shape-rendering="geometricPrecision"`；在 16px 到 512px 间缩放验证路径可读性；测试纯黑/纯白/品牌色三种背景下的对比度。
+### Logo / Brand Mark
 
-### 5. Thoughtful（周到）
-每个像素都有意为之，细节经得起推敲。  
-*SVG 实现*：每个关键形状附带数学坐标注释（如 `<!-- 黄金分割外圈 r=103.5 (64×1.618) -->`）；尺寸链可追踪回溯。
+Primary objective: durable identity and differentiation.
 
-> **交付前自查**：对生成的 SVG 逐条对照 SMART，至少满足 4/5 项方可交付。
+Priority:
 
----
+```text
+Meaning + Distinction > literal recognizability
+```
 
-## 📐 坐标体系与尺寸映射（唯一标准）
+A logo may be abstract if its logic is strongly connected to the product/brand.
 
-- **唯一基础画板**：`viewBox="0 0 512 512"`，所有坐标、线宽、圆角均基于此空间定义。
-- **网格系统**：使用 **8×8 逻辑网格**（每格 = 64px），重要锚点必须对齐网格线或半格位置（32px 倍率）。
-- **小尺寸适配**：当需要生成系统图标（如 24×24px 显示）时，按比例缩放理解（512÷24≈21.33 倍）。  
-  线宽映射表（512 画板 → 实际显示 24px）：
-  - 细线风格：512px 下 12~16px → 实际 ≈ 0.56~0.75px （用 12px 作为轻量线）
-  - 标准线：24px → 实际 1.125px
-  - 粗线/强调：36~48px → 实际 1.7~2.25px
-  - 任何线宽取值必须能被 4 整除（保证在 512 网格中无亚像素偏移）。
-- **强制使用**：`shape-rendering="geometricPrecision"` 确保矢量渲染清晰度。
+### App Icon
 
-- **多场景适配检查表**：
-  - **深色/浅色背景双版本**：始终生成标准色版 + 纯黑版（`#000` 路径用于浅底）+ 纯白版（`#fff` 路径用于深底），确保 logo 在两种极端背景下的可读性
-  - **最小可读尺寸测试**：缩放至 16×16px 检查——如果路径交汇处模糊或细节丢失，合并或移除该细节
-  - **黑白反转测试**：使用 `<filter id="invert"><feColorMatrix type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0"/></filter>` 模拟反色，任何在设计阶段反色后产生意外象征意义的形状必须调整
-  - **平台差异补偿**：Windows 系统渲染较粗，macOS 较细——当目标平台为 Windows 时推荐将 stroke-width 降低 1 档（如 24px→20px）
+Primary objective: fast launcher recognition plus product identity.
 
----
+Priority:
 
-## 🎨 专业艺术原理（含可执行技术提示）
+```text
+Recognition ≈ Distinction
+```
 
-### 1. 数学几何与构造
-- **黄金比例缩放**：同心圆半径、间距、线宽递进关系采用 φ=1.618 倍数。  
-  *技术实现*：例如中心圆 r=64，外圈 r=103.5（64×1.618），再外圈 r=167.4。
-- **动态对称网格**：使用 √2 矩形（1:1.414）或 √3 矩形分割画板，通过 `<line>` 引导构图。
+Do not simply place a complex full logo into a rounded square.
 
-### 2. 格式塔心理学应用
-- **负形互锁**：背景与前景图形成互相咬合的剪影。  
-  *技术实现*：使用 `<mask id="negSpace">` 将白色形状从黑色背景中镂空，或通过复合路径 `fill-rule="evenodd"` 制造双层可读性。
-- **闭合律**：有意断开路径 2~8px（512 画板），让视觉自动补全。  
-  *技术实现*：路径 `M ... L ...` 中在末端前停止，用 `stroke-linecap="round"` 平滑端点。
-- **良好连续律**：沿贝塞尔曲线对齐多个元素，统一切线方向。
+### Functional Icon Set
 
-### 3. 光学补偿
-- **光学居中**：三角形或不对称图形需向视觉重心偏移。  
-  *技术实现*：默认几何中心 (256,256)，对向上指向的三角形，将顶点坐标上移 5%（如 y 从 120 改为 113），形成视觉平衡。
-- **圆角补偿**：任何 `stroke-linejoin="round"` 的尖锐角会向外扩展 1/2 线宽，当需要精确边缘时必须向内收缩形状边界。
-- **交叉线等宽**：锐角交叉处线条会显粗，需单独绘制短路径覆盖交叉点，或使用 `stroke-linejoin="round"` 配合微调角度以避免挤压。
+Primary objective: interaction clarity and consistency.
 
-### 4. 风格体系速查
-- **瑞士风格**：非对称网格布局，颜色 ≤3 种（高饱和主色+黑/白），使用 `font-family="sans-serif"` 如有文字。
-- **包豪斯**：仅使用 `<circle>`, `<rect>`, `<polygon>`, `<path>` 基本形，禁止装饰曲线。
-- **极简线系统**：线宽 16px，开放路径，浅灰或单色。
-- **新粗野主义/赛博**：纯色高饱和度霓虹色 + 黑色粗边框（stroke-width=24），微偏移投影（使用 `<filter>` 仅限简单投影 `feDropShadow`）。
-- **微扁平/轻拟物**：在扁平基础上增加 2~3 层渐变 `linearGradient` + 微妙 `feDropShadow`，保留简洁轮廓但赋予轻度质感。适合引导页、空状态等大区域图标。
+Priority:
 
-### 5. 图标类型体系与 SVG 实现对照
+```text
+Recognition > Originality
+```
 
-| 类型 | 特征 | SVG 实现 | 适用场景 |
-|------|------|----------|----------|
-| **扁平 (Flat)** | 纯色填充，无渐变/阴影，抽象简化 | `<path fill="#..." d="...">`，纯色无叠加 | 标签栏、工具栏、系统图标 |
-| **线性 (Linear/Outlined)** | 由直线、曲线、点组合勾勒轮廓，辨识度高 | `<path fill="none" stroke="#..." stroke-width="..." stroke-linecap="round" stroke-linejoin="round">` | 内容区域功能入口、设置页 |
-| **面形 (Filled/Solid)** | 闭合路径 + 大块色彩填充，视觉占比最大化 | `<path fill="#..." d="...">`，可配合背板 `<circle>` 使用 | 运动/时尚类标签栏、首页主要入口 |
-| **微扁平/轻拟物** | 扁平结构 + 2~3 层渐变 + 微妙投影 | `<linearGradient>` + `<path fill="url(#grad)">` + `feDropShadow` | 引导页、空状态情感化设计 |
-| **拟物 (Skeuomorphic)** | 模拟现实物品的质感、光影、纹理 | 多个径向渐变 `radialGradient` + 投影 `feDropShadow` + 高光路径 | 不推荐本工具使用（与矢量简约目标冲突） |
+For common actions, preserve established conventions. Functional icons are not mini logos.
 
-> **线性图标绘制规范**：同一套线性图标必须使用相同 `stroke-width`（推荐 12px/16px/24px 三档）、统一端点和连接样式（全部 `round` 或全部 `butt`），开放路径与闭合路径不可混用。
->
-> **面形图标绘制规范**：带背板时图标尺寸 ≥ 背板直径 × 1/2，≤ 背板直径 × 0.618（黄金比例），且需保证所有图标的视差一致。
-> 
-> **类型选择指导**：小面积区域（＜32×32px 显示）优先使用面形或扁平图标；大面积区域（如引导页）可选用微扁平/轻拟物增加情感层次；需高辨识度时使用线性图标。
+### Audit + Revision
+
+Understand the existing intent before changing geometry. Preserve valuable identity; repair semantic, optical, consistency or production problems.
+
+### Delivery Export
+
+If design is already approved, skip conceptual design and use `svg2icon` for checks and export.
 
 ---
 
-## ⚖️ 约束与禁止事项（负面指令）
+# 1. Context Intake — Reuse Before Asking
 
-❌ **严禁**：
-- 使用任何光栅图像（`<image>` 标签）、base64 位图嵌入。
-- 引用外部字体或资源，保证完全自包含。
-- 过度复杂滤镜（模糊、噪点）导致性能问题或不可缩放。
-- 超过 5 种独立颜色（渐变中的过渡色不计），确保视觉统一。
-- 路径中出现浮点数末尾无意义的超长小数（限制小数点后 2 位，除非计算必要）。
-- 生成后更改核心视觉概念的半成品 SVG（模糊隐喻），必须产出清晰、完整的符号。
-- 在概念提案阶段就输出完整 SVG 代码（必须等待用户确认方向）。
+Before asking the user for information, inspect available project context when accessible.
 
-✅ **必须遵守**：
-- 所有标签闭合，正确嵌套。
-- 使用语义化分组 `<g>` 并添加 `id` 或 `class`（可读性）。
-- 给出每个关键形状的数学坐标注释（如 `<!-- 中心圆 (256,256) r=64 -->`）。
+Preferred evidence:
 
----
+1. `context.md` — Project Mission, strategic goals, users, terminology, Architecture/Product Intent.
+2. `DESIGN.md` — existing visual language, UX principles, tokens, brand character.
+3. `user_plan/<feature>/<feature>.md` — current feature Goal Model / Desired Outcome.
+4. `user_plan/<feature>/design.md` — current feature Experience Intent.
+5. existing logo/icon assets and adjacent UI.
+6. the user's current description.
 
-## 🔍 图标评判标准（五维质检清单）
+Do not make the user repeat information already established in these sources.
 
-生成 SVG 后，逐条对照检查，全部通过方可交付：
-
-### 1. 识别性（Recognition）
-图标在没有文字辅助时是否可被用户立即理解？
-- **含义识别**：使用通用视觉语言（如「放大镜」= 搜索），避免文化特异性隐喻
-- **视觉识别**：在 **纯黑背景**（`<rect fill="#000" />`）和 **纯白背景**（`<rect fill="#fff" />`）下分别查看，所有细节必须清晰可见
-- **强光测试**：模拟高亮环境（亮度对比度压缩 50%），主结构不丢失
-
-### 2. 规范性（Standardization）
-是否符合一致的绘制规则？
-- **视觉大小一致性**：方形和圆形在相同 px 尺寸下视觉重量不同——方形需缩小至 90% 或圆形扩至 110% 以达到视觉均衡
-- **饱满度**：用正负形衡量法——在图标边界框内，正形面积占比应在 60%~80% 之间，低于 60% 则太空旷，高于 80% 则太拥挤
-- **相同规律**：同一套图标中圆角半径统一（如全部 8px 或全部 16px）、描边粗细统一、端点和连接样式统一
-- **像素对齐**：所有坐标值能被 1px 整除避免亚像素模糊，推荐对齐 512 画板的 4px 网格
-
-### 3. 统一性（Unity）
-成套图标在视觉上是否被视为同一组？
-- **基础参数一致**：线宽、圆角大小、配色方案、细节层次在设计合集中不变
-- **格式塔相似性原则**：相同功能层级的图标使用相同的视觉语法（如全部线性或全部面形）
-- **风格锚点统一**：如果某个图标使用了断线/圆角/倾斜角，则所有图标都应沿用
-
-### 4. 呼吸感（Breathing / Whitespace）
-元素间是否有足够的留白？
-- 图标内部元素间距 ≥ 主元素大小的 1/8（512 画板下最少 8px 间距）
-- 元素数量 ≤ 3 个主形 + 2 个辅助形，超过则需合并或删除冗余细节
-- 图标边缘保留 ≥ 16px 的内边距（与 512 画板边界），防止视觉拥挤
-
-### 5. 品牌感（Brand Identity）
-是否体现了品牌独有气质？
-- **品牌色提取**：使用品牌色 `#...` 作为主色，通过调整饱和度和明度扩展辅助色
-- **品牌图形复用**：核心图标（如首页）优先使用品牌图形而非通用符号
-- **视觉气质匹配**：图标风格与品牌调性一致——金融品牌用稳重几何，创意品牌用活泼断线
-
-> **黑/白反转测试**（PDF 推荐技巧）：在设计阶段通过对 SVG 应用 `filter="url(#invert)"` 实现黑白逆转，任何在反色后显得模糊或产生意外象征意义的形状都需调整。
+If context conflicts, surface the conflict instead of silently choosing one version.
 
 ---
 
-## 🧬 品牌基因提取方法（6 种策略）
+# 2. Product Meaning Model
 
-让图标从「通用素材」进化为「品牌专属符号」，在标签栏/功能图标中植入品牌 DNA：
+Before concept generation, establish the smallest useful model of what this asset represents.
 
-### 1. 提取品牌图形（Brand Icon as Home Tab）
-将品牌图形直接作为「首页」图标，形成 App 内外视觉联系。  
-*SVG 实现*：从品牌 logo 提取主图形，简化为 512×512 内的 `<path d="...">`，保留最可识别的轮廓特征。  
-*注意*：仅当第一个 tab 无特定功能语义（如「聊天列表」）时使用，否则降低可用性。
+Answer only the relevant questions:
 
-### 2. 提取品牌色彩（Brand Color Palette）
-从品牌色系中提取主色、辅助色、点缀色。  
-*SVG 实现*：
-- 整体填充品牌色：`<path fill="#..." d="...">`  
-- 局部填充品牌色：仅图标关键部分使用品牌色，其余用中性灰  
-- 品牌色作背景色：用品牌色 `<rect>` 作背板，图标反白  
-*色彩调整*：可适当降低饱和度（-20%）或提高明度（+15%）以适配浅色/深色模式。
+```text
+What is it?
+Who is it for?
+What job is the user trying to accomplish?
+What transformation does the product/feature create?
+What makes it meaningfully different?
+What should it feel like?
+What should it never feel like?
+Where will this asset actually appear?
+```
 
-### 3. 提取设计语言（Visual Language Extraction）
-从品牌 VI 中提取辅助图形作为统一设计元素。  
-*SVG 实现*：如果品牌图形有独特的轮廓曲率（如飞猪的翅膀形 F），将该曲率作为路径模板复用到「我的」、「设置」等图标的轮廓中。使用 `<use>` 标签引用共享路径片段。
+The most important fields are **Transformation**, **Differentiator**, and **Anti-Meaning**.
 
-### 4. 提取产品气质（Product Temperament）
-品牌气质决定视觉语法。  
-*SVG 实现*：
-- 传统/人文品牌：使用宋体汉字笔画拆解为图形，`stroke-linecap="butt"` 直角表达刚劲  
-- 科技/现代品牌：使用圆角几何 `stroke-linejoin="round"`、`stroke-linecap="round"` 表达亲和  
-- 创意/潮流品牌：使用断线、斜切、非对称构图 `d="M ... L ... M ..."`（多条开放路径）
+Example:
 
-### 5. 拆分品牌名称（Name as Icon Set）
-将品牌名中的字母/字符拆解为多个图形，分配给不同功能标签。  
-*SVG 实现*：每个字母作为独立 `<path>` 或 `<text>`（转换为路径），放置在对应标签栏位置。  
-*适用*：品牌名短（4-6 字母）、目标用户年轻化的产品。
+```text
+Weak:
+Product: backup tool
+Object: hard drive
 
-### 6. 展开形象联想（Metaphorical Extension）
-突破「首页=房子」的常规比喻，寻找品牌域内的独特符号。  
-*SVG 实现*：例如马蜂窝的「首页=蜂巢」——用六边形 `<polygon points="..."` 替代房子轮廓。关键在于符号必须在品牌语境内有可理解性。
+Better:
+Before: valuable data feels vulnerable
+After: data feels recoverable and protected
+Transformation: uncertain → protected
+Differentiator: automatic continuous recovery, not manual copying
+```
 
-> **应用原则**：从 6 种方法中选择 **1~2 种** 贯穿整套图标，过多方法混用会导致视觉碎片化。优先推荐「品牌图形」+「品牌色彩」组合。
+Use `references/05-product-meaning-and-aesthetic-thesis.md` for deeper guidance.
 
----
+## Clarification Policy
 
-## 📋 工作流（严格按阶段推进）
+Ask only when an unresolved answer would materially change the concept.
 
-### Phase 1 – 概念简报 + 设计概要理解
-向用户询问并确认以下信息。前 4 项为必填，后 5 项为深度概要：
+Prefer 1–3 high-value questions. Do not run a branding questionnaire by default.
 
-**必填信息：**
-1. 品牌名与行业
-2. 核心隐喻关键词（1-2 个，如“连接、生长、守护”）
-3. 偏好艺术流派（可选：瑞士/包豪斯/极简线/新粗野/有机流线/微扁平）
-4. 主色调倾向（如钛白&钴蓝、沙漠暖色、单色碳黑）
-
-**设计概要清单（源自 Logo 设计流程—Newsbolt 案例）：**
-- **依据**: 对照 [references/logo-design-process.md](references/logo-design-process.md) §Step 1 核验完整设计概要清单。
-5. **项目目标**：这个标志成功的具体标准是什么？（如：提升品牌识别度、统一线上线下形象）
-6. **目标受众**：这个标志应与哪些人群产生共鸣？（年龄/行业/文化背景）
-7. **品牌定位**：品牌对消费者承诺的核心是什么？与竞品的核心差异是什么？
-8. **应用场景枚举**：列出所有已知的使用场景（网站 favicon / App 启动图标 / 印刷品 / 实体标牌等）
-9. **预算与交付物**：是否需要同时交付单色版、深色版、动画版？
-
-### Phase 1.5 – 视觉研究与深度策略拷问（必须完成，不可跳过）
-
-**步骤 A：视觉研究（Visual Research）**
-在提问前，先引导用户提供/确认视觉参考：
-- **依据**: 对照 [references/logo-design-process.md](references/logo-design-process.md) §Step 2 了解完整的视觉研究流程。
-- 情绪板（moodboard）：收集 5~10 张能代表品牌调性的图片（来自 Dribbble / Pinterest / LogoLounge）
-- **竞品符号审计**：请用户提供 1~2 个喜欢的同类标志 + 1 个讨厌的——不抄袭，只研究视觉语法
-- **高频资源推荐**：完整工具书参见 [references/design-resources.md](references/design-resources.md)（灵感/配色/插件/学习教程）
-- 将收集到的参考提炼为 3 个关键词（如「速度、透明、流动」）
-
-**步骤 B：深度策略拷問**
-在用户提供初始信息后，主动追问以下问题（至少选择 3 个）：
-
-1. **情感映射**  
-   “如果你的品牌是一种自然现象/动物/建筑，它会是什么？为什么？”  
-   （迫使从功能描述转向可视觉化的隐喻）
-
-2. **记忆锚点**  
-   “你希望用户在 0.3 秒扫视后，记住哪**一个**最核心的图形特征？”  
-   （如：一道斜向切割、一个不可见的负形字母、一个悬停的点）
-
-3. **应用下限测试**  
-   “这个标志会在最小什么尺寸下使用？（如 16px 网站图标、刺绣徽章、压印）  
-   是否需要单色纯黑/纯白版本才能满足该场景？”  
-   （直接决定线宽下限和细节取舍）
-
-4. **视觉禁忌**  
-   “有什么形状、颜色或意象是**绝对不能出现**的？（例如：不要翅膀、不要类似某竞品的环绕弧线）”  
-   （防避雷，尤其金融、医疗、文化禁忌领域）
-
-5. **动态与静态边界**  
-   “未来是否需要动画（如加载旋转、路径生长），或永远只作为静态图标？”  
-   （若有动画，需要提前预留独立可动的路径模块）
-
-6. **竞品符号审计**（可选）  
-   “可否提供 1-2 个你喜欢的同类标志，以及 1 个你讨厌的？不抄袭，只研究视觉语法。”
-
-将拷问所得浓缩为一份 **《设计约束卡片》**，在进入 Phase 2 前复述给用户确认。
-
-### Phase 2 – 方向提案（纯自然语言，禁止输出 SVG）
-呈现 **3 个不同的设计方向**，每个方向仅用文字描述，必须包含：
-- **隐喻故事**（一句话）
-- **几何构造草图**（用 ASCII 网格、坐标点列表或矩形关系描述，例如：“两个相交圆，圆心距 160px，对称于垂直中线”）
-- **应用的格式塔原理**（如负形互锁、闭合律）
-- **预估线宽与色彩逻辑**（含推荐色板：主色/辅色/强调色，及深色与浅色背景下的表现说明）
-- **类型选择**（扁平/线性/面形/微扁平，并解释选择理由）
-
-要求用户从 3 个方案中选择 1 个，或提供融合反馈。
-
-### Phase 3 – 高保真 SVG 生产与交付
-基于选定方向生成最终 SVG，并附带：
-
-**SVG 输出要求：**
-- 完整 `<svg>` 代码块（含 `<defs>` 渐变色定义）
-- 关键坐标数学工作表（路径命令与点坐标列表）
-- **依据**: 对照 [references/functional-icon-grid.md](references/functional-icon-grid.md) 校验功能图标的网格对齐与视觉大小一致性。
-
-**多场景版本交付：**
-- **标准版**（品牌色背景+白色正形）
-- **单色版**（纯黑 `#000000` 路径，用于白色背景下的单色印刷）
-- **反白版**（纯白 `#FFFFFF` 路径，用于深色背景）
-- 当环境需要深色模式支持时，提供 `@media (prefers-color-scheme: dark)` 的 SVG 兼容版本
-- **依据**: 对照 [references/logo-design-process.md](references/logo-design-process.md) §Step 7 的交付文件组织规范。
-
-**文件交付规范：**
-- 文件夹结构：`assets/icons/[品牌名]_[版本].svg`
-- 文件命名：`newsbolt-primary.svg`, `newsbolt-mono.svg`, `newsbolt-reversed.svg`
-- 附带 1 页基础使用规范（最小尺寸/安全空间/禁止操作示例）
+If enough evidence exists, proceed with explicit assumptions rather than blocking.
 
 ---
 
-## 🧮 坐标数学工作表模板（生成时附在代码后）
-生成 SVG 后，请附加类似下文的结构化说明：
-中心点: (256, 256)
-主圆: cx="256" cy="256" r="120"
-外弧起点: M 136 256 A 120 120 0 0 1 376 256
-三角形顶点: P1(256,136) P2(136,376) P3(376,376) -> 已上移 5% 光学补偿
-线宽: 24px, stroke-linecap="round"
+# 3. Aesthetic Thesis
+
+Aesthetic direction must be expressed as a **thesis**, not a bag of style adjectives.
+
+Good:
+
+```text
+Precise, but not sterile.
+Quiet, but unmistakably technical.
+```
+
+```text
+Playful intelligence without childishness.
+```
+
+Bad:
+
+```text
+modern / premium / tech / blue / minimal
+```
+
+## Required Components
+
+For identity-oriented work, establish:
+
+### Emotional Promise
+What should the user feel when seeing it?
+
+### Visual Tension
+Choose the tension that best captures the product, for example:
+
+- Technical × Human
+- Powerful × Quiet
+- Precise × Organic
+- Playful × Serious
+- Dense × Calm
+- Familiar × Distinctive
+- Stable × Dynamic
+
+### Anti-Aesthetic
+Explicitly state what the work must not drift toward, such as:
+
+- generic SaaS
+- crypto/web3 cliché
+- gaming aggression
+- childish toy aesthetic
+- enterprise legacy software
+- generic AI sparkle/brain/network cliché
+- over-luxury black-and-gold branding
+
+### Formal Consequences
+Translate the thesis into form decisions:
+
+- silhouette
+- geometry
+- symmetry/asymmetry
+- corner character
+- visual weight
+- negative space
+- rhythm
+- color behavior
+- texture/gradient allowance
+- motion behavior if relevant
+
+Style labels may be used only after this derivation.
 
 ---
 
-## 📚 参考资料
+# 4. Symbol Strategy
 
-本技能的知识体系源自以下参考文档，工作流中各阶段已通过 **依据** 连线引用：
+Do not jump directly from product keywords to a symbol.
 
-| 文件 | 内容 | 来源 |
-|------|------|------|
-| [references/logo-design-process.md](references/logo-design-process.md) | Logo 设计全流程（7 步法） + 交付规范 | 知乎「从概念到落地 - Logo 设计指南」|
-| [references/app-icon-styles-guide.md](references/app-icon-styles-guide.md) | 13 种应用图标风格详解 + 设计流程 | 知乎「设计师必看的图标设计指南」 |
-| [references/functional-icon-grid.md](references/functional-icon-grid.md) | 功能图标网格系统 + 状态规范 + 正负形衡量法 | 知乎「设计师必看的图标设计指南」 |
-| [references/design-resources.md](references/design-resources.md) | 外部工具/配色网站/插件/学习教程汇编 | 两份资源汇总 |
+First generate 2–4 **Symbol Territories**: semantic spaces that could represent the product.
+
+Example for a knowledge product:
+
+```text
+Connection — relationships, recombination, graph
+Memory — preservation, recall, continuity
+Emergence — fragments becoming structure
+Navigation — finding a path through complexity
+```
+
+Then choose an abstraction level:
+
+- `LITERAL` — object/action directly depicted
+- `METONYMIC` — related concept stands for the whole
+- `ABSTRACT` — form expresses an underlying idea
+- `LETTERFORM` — identity derived from name/initial
+- `HYBRID` — combines two of the above with one dominant idea
+
+Rules:
+
+- Functional icons default toward `LITERAL` / conventional symbols.
+- App icons often benefit from `METONYMIC` or restrained `HYBRID` logic.
+- Brand marks may use `ABSTRACT` / `LETTERFORM` when ownability is stronger.
+- Never combine multiple symbols simply to include every product keyword.
+
+Read `references/06-symbol-strategy-and-concept-critique.md` when concept selection is non-trivial.
 
 ---
 
-# 强化执行层：Skill 与内置 CLI 的统一工作协议
+# 5. Concept Exploration
 
-本节是本 skill 的**最高优先级执行协议**。上文提供设计理论、审美标准与视觉方法；本节规定实际工作时如何把设计判断、SVG 生产、质量检查与交付导出统一为一个闭环。
+For meaningful identity work, explore distinct concepts before vector production.
 
-## 0. 角色边界
+Each concept should contain:
 
-本 skill 分为两层：
+```text
+Concept name
+Core idea
+Product connection
+Aesthetic connection
+Symbol territory
+Abstraction level
+Visual anchor
+Why it could be ownable
+Small-size behavior
+Primary risk / likely misreading
+```
 
-| 层级 | 责任 | 不负责 |
-|---|---|---|
-| Skill / Agent | 理解需求、追问、判断资产类型、提出方向、生成 SVG、做设计质检、解释正反案例 | 不直接承担平台位图导出的底层实现 |
-| `svg2icon` CLI | 对 SVG 执行结构化检查、导出 PNG/JPG/ICO/ICNS、生成 mono/reversed、自动命名交付物 | 不做审美判断、不替用户决定品牌气质、不生成设计概念 |
+Concepts must differ in **idea**, not merely color or corner radius.
 
-**强制原则**：CLI 是交付引擎，不是设计师。所有设计决策必须在 SVG 生成前由 skill 完成；CLI 只处理“已生成 SVG → 可交付资产”。
+Do not rank by a simplistic total score alone. Use critique:
 
-## 1. 任务入口判定
+- Is the concept specifically connected to this product?
+- Does it embody the Aesthetic Thesis?
+- Is the visual anchor memorable without explanation?
+- Does it become generic when the brand name is removed?
+- What is the most likely wrong interpretation?
+- What survives at 16–32px?
 
-收到请求后，先判断用户真正需要的是哪一种资产：
+If the user explicitly asks for immediate generation, select the strongest concept internally and briefly explain the rationale instead of forcing a multi-round approval ceremony.
 
-| 用户说法 | 应判定为 | 产出重点 |
-|---|---|---|
-| “给我设计一个品牌标志 / logo / mark” | Logo / Brand Mark | 记忆点、品牌差异、单色可用性、横竖组合潜力 |
-| “给 app 做图标 / 桌面图标 / 应用图标” | App Icon | 背板、平台适配、启动器可读性、1024/512/256 导出 |
-| “做一组功能图标 / 工具栏图标 / tab 图标” | Functional Icon Set | 语义一致、线宽统一、视觉重量一致、状态版本 |
-| “把这个 SVG 转成 png/ico/icns” | Delivery Export | 使用 `svg2icon`，先检查再导出 |
-| “优化我已有的图标” | Audit + Revision | 先审查，再给修改建议或重写 SVG |
+---
 
-更多边界见：`references/00-reference-index.md` 与 `references/icon-vs-logo-distinction.md`。
+# 6. Form Language
 
-## 2. 标准工作流
+Only after concept selection should the design establish a visual grammar.
 
-### Phase A — 需求压缩
+Define relevant dimensions:
 
-如果用户信息不足，最多追问 **3 个关键问题**。不得用长问卷阻塞创作。
+- dominant primitive or contour logic
+- filled vs outlined
+- stroke character
+- corner system
+- symmetry / controlled asymmetry
+- optical center
+- visual weight
+- positive/negative-space relationship
+- spacing rhythm
+- color hierarchy
+- depth/gradient policy
 
-优先级：
+## Geometry Policy
 
-1. 品牌 / 产品是什么？
-2. 想传达的 1–2 个关键词是什么？
-3. 使用场景是什么：logo、app icon、functional icon，还是导出？
+Use grids and ratios when they support the concept and consistency.
 
-如果用户已给足信息，直接进入设计，不重复追问。
+Never claim that a design is good because it uses φ, Fibonacci, √2, or another mathematical ratio.
 
-### Phase B — 设计方向
+```text
+Intent → visual relationship → candidate geometry → optical correction
+```
 
-生成 SVG 前，必须先在内部确认：
+not:
 
-- 资产类型：Logo / App Icon / Functional Icon
-- 主隐喻：一个核心符号，不超过两个辅助符号
-- 风格语言：几何 / 线性 / 面形 / 微扁平 / 字母标 / 正负形
-- 复杂度预算：小尺寸是否要保留细节
-- 是否需要 `primary / mono / reversed`
+```text
+golden ratio → therefore good design
+```
 
-可参考：
+A mathematically perfect shape may require optical correction. Visual balance has priority over numerical purity.
 
-- `references/01-brief-and-decision-tree.md`
-- `references/02-positive-negative-examples.md`
+---
+
+# 7. Vector Engineering Contract
+
+Detailed production rules live in references rather than bloating this skill.
+
+Primary references:
+
+- `references/03-svg-contract-and-quality-gates.md`
+- `references/functional-icon-grid.md`
 - `references/logo-design-guide.md`
-- `references/icon-design-guide.md`
+- `references/app-icon-styles-guide.md`
 
-### Phase C — SVG 生产
-
-所有 SVG 必须满足：
+Default source canvas remains:
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" shape-rendering="geometricPrecision">
 ```
 
-强制要求：
+Production invariants:
 
-- 只使用矢量元素，不使用 `<image>`。
-- 不嵌入 base64 位图。
-- 不引用外部字体、CSS、图片、滤镜文件。
-- 坐标尽量对齐 4px 网格。
-- 关键结构对齐 8×8 逻辑网格。
-- 小数最多保留 2 位，除非几何计算确有必要。
-- 图层分组必须语义化，如 `id="background"`、`id="symbol"`、`id="highlight"`。
+- vector-only; no `<image>` or embedded bitmap;
+- no external runtime resources;
+- semantic groups where useful;
+- avoid gratuitous path complexity;
+- maintain small-size readability;
+- support mono/reversed when relevant;
+- use optical correction rather than blindly forcing geometric centering;
+- do not add mathematical comments unless they explain a real construction decision.
 
-SVG 合约详见：`references/03-svg-contract-and-quality-gates.md`。
+A 512 source canvas is a production convention, not the aesthetic foundation.
 
-### Phase D — 设计质检
+---
 
-在交付 SVG 前，必须做人工设计质检：
+# 8. Contextual Review
 
-1. **0.3 秒识别**：第一眼能否理解主要符号？
-2. **16px 测试**：缩到极小尺寸是否仍可读？
-3. **单色测试**：变成纯黑是否仍成立？
-4. **反白测试**：变成纯白是否仍成立？
-5. **差异测试**：是否像竞品或通用模板？
-6. **负形测试**：空白是否形成意外图形？
-7. **统一测试**：如果是图标组，线宽、圆角、视觉重量是否一致？
+Do not validate only on a blank white canvas.
 
-正反案例见：`references/02-positive-negative-examples.md`。
+Review in the actual expected context where possible.
 
-### Phase E — CLI 导出
+## Meaning
 
-当用户需要交付 PNG/ICO/ICNS/JPG 时，使用内置 CLI：
+- Does the mark still connect to the product/feature goal?
+- Did implementation drift away from the selected concept?
+- Does it accidentally communicate an unwanted category or promise?
 
-```bash
-./bin/svg2icon-linux --svg logo.svg --variants primary,mono,reversed --sizes 512,256,128,64,32 -f png,ico -o dist/
+## Aesthetic Thesis
+
+- Does the final form still express the intended tension?
+- Did it collapse into a generic trend?
+- Does it violate the Anti-Aesthetic?
+
+## Distinction
+
+- Is there a clear visual anchor?
+- Would a reasonable competitor plausibly use the same mark unchanged?
+- Is distinctiveness coming from meaning/form, not decoration?
+
+## Functional Quality
+
+- small-size test;
+- silhouette test;
+- mono / reversed test;
+- dark / light context;
+- optical balance;
+- icon-set consistency if applicable;
+- platform crop/safe-area behavior if applicable.
+
+## Product Context
+
+For functional icons, review them next to adjacent controls rather than individually.
+For app icons, review launcher-scale behavior.
+For brand marks, review realistic header/favicon/social/mono contexts.
+
+---
+
+# 9. Delivery
+
+`svg2icon` is the delivery engine, not the designer.
+
+Use it after SVG design is conceptually approved.
+
+Typical pipeline:
+
+```text
+approved SVG
+   ↓
+SVG quality gate
+   ↓
+primary / mono / reversed
+   ↓
+PNG / JPEG / ICO / ICNS
 ```
 
-规则：
-
-- 导出前 CLI 会自动检查 SVG。
-- 不再使用 `--invert`。
-- 正式变体使用 `--variants primary,mono,reversed`。
-- 文件名自动从 SVG 文件名派生，不额外询问命名。
-
-完整导出配方见：
+See:
 
 - `references/cli-usage.md`
 - `references/04-delivery-recipes.md`
 
-## 3. 设计输出格式
+Do not let export convenience change the visual concept.
 
-如果用户只要求 SVG，输出应包含：
+---
 
-1. 简短设计说明
-2. 完整 SVG 代码
-3. 质检摘要
-4. 可选导出命令
+# 10. Output Contracts
 
-如果用户要求交付包，输出应包含：
+## Design / New Asset
 
-1. SVG 源文件
-2. CLI 导出的 `primary / mono / reversed` 文件
-3. 目录结构说明
-4. 已通过 / 未执行的检查说明
+Keep the visible output proportional to the request. A useful compact design rationale contains:
 
-## 4. 正反判断原则
+```text
+Product Meaning
+Aesthetic Thesis
+Selected Symbol Strategy
+Key form decisions
+Known risk / tradeoff
+```
 
-### 好的 Logo
+Then provide or save the SVG/assets requested.
 
-- 一个主记忆点，而不是多个概念拼贴。
-- 黑白版本仍然可识别。
-- 小尺寸可读，不依赖渐变和细节。
-- 形状能解释品牌差异，而不是只像“行业图标”。
+## Audit
 
-### 差的 Logo
+Report issues by layer:
 
-- 把品牌所有关键词都画进去。
-- 只在大尺寸彩色稿中好看。
-- 依赖细碎高光、阴影、纹理。
-- 与竞品符号高度相似。
+```text
+MEANING
+AESTHETIC
+SYMBOL
+FORM
+VECTOR
+CONTEXT
+```
 
-### 好的 App Icon
+Do not repair a semantic problem with geometric polish.
 
-- 有清晰轮廓和强背板关系。
-- 在圆角裁切、深浅模式、启动器尺寸中都稳定。
-- 主体不要贴边，视觉重心居中但允许光学补偿。
+## Functional Icon Set
 
-### 差的 App Icon
+Document the shared family rules once, then focus each icon on semantic clarity.
 
-- 直接把完整 logo 塞进小方块。
-- 文字太多，16–48px 下不可读。
-- 背景和主体对比不足。
+---
 
-### 好的 Functional Icon Set
+# 11. Replan Triggers
 
-- 一套统一的线宽、端点、圆角和隐喻粒度。
-- 每个图标都能被单独理解。
-- 激活、禁用、悬停状态有明确规则。
+Return to an earlier layer when:
 
-### 差的 Functional Icon Set
+- new product context changes the meaning;
+- a concept depends on a false product assumption;
+- the chosen symbol is too generic or misleading;
+- the concept cannot survive required display sizes;
+- real product context conflicts with the assumed form language;
+- an existing design system provides a stronger, more coherent pattern;
+- user feedback changes the desired emotional promise rather than a surface preference.
 
-- 有的线性、有的面形、有的渐变。
-- 相似功能长得过于接近。
-- 视觉重量不一致，导航栏像从不同库拼接。
+Do not patch a failed concept indefinitely. Revisit the layer where the failure originated.
 
-## 5. 引用 references 的方式
+---
 
-当用户请求“设计 / 优化 / 评审”时，应优先使用：
+# 12. Completion Criteria
 
-- `references/01-brief-and-decision-tree.md`：决定要做什么
-- `references/02-positive-negative-examples.md`：给正反案例与避坑
-- `references/03-svg-contract-and-quality-gates.md`：检查 SVG 合规性
-- `references/04-delivery-recipes.md`：导出交付包
+A design is ready when relevant conditions hold:
 
-原有深度资料继续保留：
+- the represented product/feature intent is understood;
+- the asset has an explicit Aesthetic Thesis or intentionally inherits one from `DESIGN.md`;
+- the symbol strategy has a defensible relationship to product meaning;
+- the form language follows from the thesis rather than arbitrary style selection;
+- small-size/context tests appropriate to the asset type pass;
+- SVG production checks pass;
+- remaining semantic or similarity risks are explicit;
+- requested delivery variants are produced or a valid export path is provided.
 
-- `logo-design-guide.md`
-- `icon-design-guide.md`
-- `app-icon-styles-guide.md`
-- `functional-icon-grid.md`
-- `big-company-design-specs.md`
+The final question is not “Is the SVG mathematically neat?”
 
-## 6. 交付前最终检查清单
+It is:
 
-交付前必须能回答：
-
-- 这个产物是 Logo、App Icon，还是 Functional Icon？
-- 是否使用 512×512 标准 SVG？
-- 是否没有 `<image>`、base64、外部资源？
-- 是否能生成 `primary / mono / reversed`？
-- 是否能缩小到 16px 或 24px 使用？
-- 是否存在明显竞品相似风险？
-- 是否给出了可复用的 CLI 导出命令？
-
-若任一关键项失败，必须先修正再交付。
-
+> **Does this symbol feel inevitable for this product, and does it still work as a real production asset?**

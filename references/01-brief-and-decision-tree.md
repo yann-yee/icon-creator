@@ -1,115 +1,143 @@
-# Brief & Decision Tree — 需求简报与资产判定
+# Brief & Decision Tree V2 — Context First
 
-本手册用于在开始设计前快速判断：用户到底需要什么、应该追问什么、如何把模糊需求转化为可执行 SVG 任务。
+本文件用于在开始设计前快速判断：**已有上下文告诉了我们什么、还缺什么、用户真正需要哪一类视觉资产。**
 
-## 1. 最少追问原则
+目标不是完成问卷，而是以最少认知成本建立足够可靠的设计输入。
 
-除非用户明确要求完整品牌咨询，否则不要用长问卷阻塞工作。优先追问 1–3 个问题。
+## 1. Context Reuse First
 
-### 必问优先级
+如果在项目中调用，优先读取：
 
-1. **资产类型**：Logo、App Icon、Functional Icon，还是导出已有 SVG？
-2. **核心语义**：希望表达的 1–2 个关键词是什么？
-3. **使用场景**：网站、App、favicon、系统托盘、印刷、PPT、产品 UI？
+1. `context.md`
+2. `DESIGN.md`
+3. `user_plan/<feature>/<feature>.md`
+4. `user_plan/<feature>/design.md`
+5. 现有 logo/icon 资产与相邻 UI
 
-### 可选追问
+从中提取：
 
-- 有无品牌色？
-- 偏好风格：极简、几何、科技、温暖、复古、赛博、手作？
-- 有无禁用意象：动物、翅膀、盾牌、闪电、某竞品元素？
-- 是否需要单色版 / 反白版？
+- Project Mission / Product Essence
+- 目标用户
+- 当前 feature Desired Outcome
+- 产品已有视觉语言
+- 稳定设计规则
+- 明确 Non-Goals / Anti-Aesthetic
+- 实际使用位置与尺寸
 
-## 2. 资产类型判定树
+已存在的信息不要重复询问用户。
+
+## 2. Asset Type Decision
 
 ```text
-用户是否已经有 SVG，只想转换格式？
-├─ 是 → Delivery Export：使用 cli-usage.md / 04-delivery-recipes.md
+用户是否只想转换/导出已有 SVG？
+├─ 是 → Delivery Export
 └─ 否
-   ├─ 是否强调品牌识别、公司名、长期记忆？
-   │  └─ 是 → Logo / Brand Mark
-   ├─ 是否用于 App 桌面、启动器、应用商店？
-   │  └─ 是 → App Icon
-   ├─ 是否是一组 UI 操作或导航图标？
-   │  └─ 是 → Functional Icon Set
-   └─ 信息不足 → 追问资产类型和使用场景
+   ├─ 是否用于长期品牌识别？
+   │  └─ Logo / Brand Mark
+   ├─ 是否用于 App launcher / app store / desktop shortcut？
+   │  └─ App Icon
+   ├─ 是否表达 UI 操作、状态、导航或 feature action？
+   │  └─ Functional Icon / Icon Set
+   ├─ 是否已有视觉资产但觉得不对？
+   │  └─ Audit + Revision
+   └─ 信息不足 → 只追问会改变资产类型的关键问题
 ```
 
-## 3. 三类资产的设计目标
+## 3. 三类资产的目标区别
 
-| 类型 | 目标 | 不该做 |
+| 类型 | 优先级 | 核心问题 |
 |---|---|---|
-| Logo | 建立品牌记忆与差异 | 不要只画行业通用图标 |
-| App Icon | 在启动器中快速识别应用 | 不要塞入完整复杂 logo 或长文字 |
-| Functional Icon | 帮用户理解操作或导航 | 不要追求品牌独特性超过语义清晰度 |
+| Logo | Meaning + Distinction | 为什么这个符号只适合这个品牌？ |
+| App Icon | Recognition ≈ Distinction | 启动器里能否快速识别且有产品归属？ |
+| Functional Icon | Recognition > Originality | 用户是否无需猜测就能理解操作？ |
 
-## 4. 快速设计简报模板
+不要把 Functional Icon 当成 Logo 设计，也不要把 Logo 降级成行业通用 pictogram。
 
-### Logo Brief
+## 4. Minimum Product Meaning Brief
 
-```text
-品牌名：
-行业 / 产品：
-关键词：
-目标用户：
-希望避免的视觉元素：
-使用场景：网站 / App / favicon / 印刷 / 社媒 / 其他
-偏好风格：几何 / 极简 / 有机 / 科技 / 手作 / 其他
-品牌色：
-```
-
-### App Icon Brief
+只收集缺失项：
 
 ```text
-App 名称：
-核心功能：
-用户打开它是为了什么：
-是否已有 logo：
-是否需要文字：建议默认不用文字
-平台：iOS / Android / macOS / Windows / Web
-偏好背板：纯色 / 渐变 / 几何 / 轻拟物
+What is it?
+Who is it for?
+User job:
+Before → After transformation:
+Meaningful differentiator:
+Desired feeling:
+Must NOT feel like:
+Usage context:
 ```
 
-### Functional Icon Set Brief
+对于 feature icon，重点不是“这个功能叫什么”，而是：
 
 ```text
-图标列表：
-使用位置：导航栏 / 工具栏 / 侧边栏 / 卡片 / 空状态
-显示尺寸：16 / 20 / 24 / 32 / 48
-风格：线性 / 面形 / 扁平 / 双调
-状态：default / active / disabled / hover
-是否使用品牌色：
+用户当前处于什么状态？
+触发这个功能后发生什么变化？
+这个变化最值得被视觉化的是什么？
 ```
 
-## 5. 概念选择矩阵
+## 5. High-Value Clarification Questions
 
-每个候选方向按 1–5 分打分：
+只有答案会改变概念时才问。
 
-| 指标 | 问题 |
-|---|---|
-| 识别性 | 0.3 秒内能看懂吗？ |
-| 独特性 | 与竞品相比是否有记忆点？ |
-| 简洁性 | 小尺寸是否仍可读？ |
-| 可扩展性 | 能否做 mono/reversed、动画、图标组？ |
-| 品牌匹配 | 是否符合品牌气质？ |
+优先问题示例：
 
-优先选择总分高、且没有单项低于 3 分的方向。
+### Meaning
 
-## 6. 设计方向输出模板
+> 用户使用这个产品/功能前后，最核心的状态变化是什么？
 
-在生成 SVG 前，可以先给用户 2–3 个方向：
+### Differentiation
 
-```text
-方向 A：几何负形
-- 隐喻：连接 + 增长
-- 视觉锚点：中心负形箭头
-- 优点：小尺寸清晰，适合科技品牌
-- 风险：需要避免像通用“上传”图标
+> 同类产品通常都能做什么，而你最希望用户记住你哪一点不同？
 
-方向 B：字母抽象
-- 隐喻：品牌首字母 + 流动轨迹
-- 视觉锚点：一笔连续曲线
-- 优点：品牌专属感强
-- 风险：若字母识别过强，可能弱化产品语义
+### Aesthetic
+
+> 如果只能选一个张力，更接近“Technical × Human”还是“Powerful × Quiet”？
+
+### Anti-Aesthetic
+
+> 最不希望它看起来像哪类产品：通用 SaaS、游戏、Crypto、传统企业软件、AI cliché，还是其他？
+
+### Context
+
+> 这个图标最关键的真实使用位置和尺寸是什么？
+
+默认最多追问 1–3 个问题。
+
+## 6. Context Sufficiency Gate
+
+满足以下条件即可进入 Aesthetic Thesis，不追求信息完美：
+
+- 知道资产类型；
+- 知道它代表的产品/feature；
+- 知道最重要的 transformation 或 user job；
+- 知道至少一个 differentiation / design constraint；
+- 知道主要使用场景；
+- 没有一个高影响未知会彻底改变语义。
+
+低风险未知可以作为显式假设继续。
+
+## 7. Compact Design Brief Output
+
+不要输出长问卷。内部或用户可见 brief 建议压缩为：
+
+```markdown
+## Product Meaning
+- Essence:
+- User:
+- Transformation:
+- Differentiator:
+- Usage context:
+
+## Desired Feeling
+- Emotional promise:
+- Visual tension:
+- Anti-aesthetic:
+
+## Constraints
+- Existing design language:
+- Required platform/size:
+- Existing symbols to preserve/avoid:
 ```
 
-如果用户明确要求直接生成，则无需冗长提案，直接选择最稳妥方向并说明理由。
+随后进入 `05-product-meaning-and-aesthetic-thesis.md`。
